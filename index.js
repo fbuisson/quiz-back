@@ -4,6 +4,7 @@ const fs = require('fs');
 const { log } = require('console');
 const app = express();
 const port = process.env.PORT || 3000;
+const questionList = require('./questionList.js')
 
 let questions = [];
 let points = 0;
@@ -13,18 +14,12 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/getQuestions', (req, res) => {
-    fs.readFile('./questionList.json', 'utf8', (error, data) => {
-        if (error) {
-            res.status(500).send("Erreur lors de la lecture du fichier");
-            return;
-        }
+    
         try {
-            const obj = JSON.parse(data);
-            res.json(obj);
+            res.json(questionList);
         } catch (parseError) {
             res.status(500).send("Erreur lors de l'analyse du JSON");
         }
-    });
 });
 
 app.get('/getSavedQuestions', (req, res) => {
